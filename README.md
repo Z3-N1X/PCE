@@ -1,2 +1,2 @@
-# PCCE
-Python CLI code editor
+# PCE
+Python CLI editor
