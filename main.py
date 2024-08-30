@@ -1,9 +1,22 @@
-from sys import argv
-import os
+try:
+    from sys import argv
+    import os
+    import argparse
+except:
+    raise ImportError
 
 
+parser = argparse.ArgumentParser(
+                    prog='PCE',
+                    description='Python CLI Editor',
+                    epilog='Use vozicode -help'
+)
 
-file_name = argv[1] if len(argv) > 1 else None
+parser.add_argument('filename')
+
+args = parser.parse_args()
+file_name = args.filename
+
 file_text = open(f"{os.getcwd()}/{file_name}", "r").read()
 
 os.system("cls")
