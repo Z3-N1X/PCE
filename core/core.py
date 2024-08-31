@@ -4,6 +4,8 @@ The Core class handles argument parsing using the argparse library.
 import argparse
 import os
 
+from loging.log import Log
+
 class Core:
     """
     The Core class handles argument parsing using the argparse library.
@@ -15,6 +17,7 @@ class Core:
             description='Python CLI Editor',
             epilog='Use vozicode -help'
         )
+        self.log= Log()
 
     def _create_arg_parser(self):
         """
@@ -32,7 +35,7 @@ class Core:
         except SystemExit:
             return None
         except Exception as e:
-            print(f"Error: {e}")
+            self.log.error(f"Error: {e}")
             return None
 
     def start(self):
@@ -51,8 +54,8 @@ class Core:
                     os.system('cls' if os.name == 'nt' else 'clear')
                     print(file_text, end="\r")
             except FileNotFoundError:
-                print(f"Error: File '{file_name}' not found.")
+                self.log.error(f"Error: File '{file_name}' not found.")
                 return
             except Exception as e:
-                print(f"Error: {e}")
+                self.log.error(f"Error: {e}")
                 return
