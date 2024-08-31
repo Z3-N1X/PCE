@@ -1,3 +1,6 @@
+"""
+The Core class handles argument parsing using the argparse library.
+"""
 import argparse
 import os
 
@@ -34,7 +37,8 @@ class Core:
 
     def start(self):
         """
-        Starts the Core class by creating the argument parser and parsing the command-line arguments.
+        Starts the Core class by creating the argument parser 
+        and parsing the command-line arguments.
         """
         self._create_arg_parser()
         args = self.parse_args()
@@ -42,7 +46,7 @@ class Core:
             file_name = args.filename
 
             try:
-                with open(os.path.join(os.getcwd(), file_name), 'r') as file:
+                with open(os.path.join(os.getcwd(), file_name), 'r', encoding='utf-8') as file:
                     file_text = file.read()
                     os.system('cls' if os.name == 'nt' else 'clear')
                     print(file_text, end="\r")
