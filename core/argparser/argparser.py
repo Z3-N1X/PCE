@@ -1,3 +1,14 @@
+"""
+argparser.py
+
+Module for parsing command-line arguments.
+
+Classes:
+    ArgParser: A class for parsing command-line arguments.
+
+Functions:
+    parse_args: Parse command-line arguments and return a namespace object.
+"""
 import argparse
 from argparse import _FormatterClass, ArgumentParser
 from collections.abc import Sequence
