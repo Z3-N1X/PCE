@@ -13,11 +13,15 @@ Classes:
 
 Methods:
     info(text): Prints an info log message.
+    error(text): Prints an error log message.
 
 Usage:
     log = Log()
     log.info("This is an info log message")
+    log.error("This is an error log message")
 """
+import colorama
+colorama.init()
 
 class Log:
     """
@@ -28,6 +32,7 @@ class Log:
 
     Methods:
         info(text): Prints an info log message.
+        error(text): Prints an error log message.
     """
 
     def info(self, text: str) -> None:
@@ -40,7 +45,7 @@ class Log:
         Returns:
             None
         """
-        print("① - ".join(["", text]) + "\033[0m")
+        print("[INFO] - ".join(["", text]) + "\033[0m")
 
     def error(self, text: str) -> None:
         """
@@ -52,4 +57,4 @@ class Log:
         Returns:
             None
         """
-        print("\033[91m ⚠️ - ".join(["", text]) + "\033[0m")
+        print(colorama.Fore.RED ,"[ERROR] - ".join(["", text]))

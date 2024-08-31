@@ -4,7 +4,7 @@ The Core class handles argument parsing using the argparse library.
 import argparse
 import os
 
-from loging.log import Log
+from .loging.log import Log
 
 class Core:
     """
