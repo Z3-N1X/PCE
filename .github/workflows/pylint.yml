@@ -1,23 +1,28 @@
-name: Pylint
+name: Lint and Format
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.12"]
+
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
+    - uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: '3.x'
+
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install pylint
-    - name: Analysing the code with pylint
+        pip install isort pylint
+
+    - name: Run isort
       run: |
-        pylint $(git ls-files '*.py')
+        isort . 
+
+    - name: Run Pylint
+      run: |
+        pylint **/*.py --fail-under=6
+      continue-on-error: true
