@@ -28,20 +28,44 @@ class Core:
             self._print_file_content(file_name)
         else:
             self.current_pos = 0
-            dirs_in_current_dir: list[str] = next(os.walk('.'))[1]
-            file_names = next(os.walk("."), (None, None, []))[2]  # [] if no file
 
-            for dir_name in dirs_in_current_dir:
-                self.log.folder(dir_name)
+            self.render_dir_childs()
 
-            for file_name in file_names:
-                self.log.file(file_name)
+            keyboard.add_hotkey("up", self._up_key_pressed)
+            keyboard.add_hotkey("down", self._down_key_pressed)
 
-            all_childs = file_names + dirs_in_current_dir
+        keyboard.wait("esc")
 
+    def render_dir_childs(self):
+        os.system("cls" if os.name == "nt" else "clear")
+
+        dirs_in_current_dir: list[list] = [ [x,"dir"] for x in next(os.walk('.'))[1]]
+        file_names: list[list] = [ [x,"file"] for x in next(os.walk("."), (None, None, []))[2]]  # [] if no file
+
+        all_childs = dirs_in_current_dir + file_names
+
+        self.all_childs_len = len(all_childs)
+
+        child_num = 0
+        for child in all_childs:
+            if child[1] == "file":
+                self.log.file(child[0], self.current_pos == child_num)
+            if child[1] == "dir":
+                self.log.folder(child[0], self.current_pos == child_num)
             
+            child_num += 1
 
-        keyboard.wait("ctrl+esc")
+    def _up_key_pressed(self):
+        if self.current_pos == 0:
+            return
+        self.current_pos -= 1    
+        self.render_dir_childs()  
+
+    def _down_key_pressed(self):
+        if self.current_pos == self.all_childs_len - 1:
+            return
+        self.current_pos += 1    
+        self.render_dir_childs()  
 
     def add_args(self):
         """

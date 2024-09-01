@@ -70,9 +70,9 @@ class Log:
             None
         """
         if not selected:
-            print("[DIR] - ".join(["", name]))
-        else:
             print(colorama.Fore.GREEN, "[DIR] - ".join(["", name]))
+        else:
+            print(colorama.Fore.WHITE, " [DIR] - ".join(["", name]))
 
     def file(self, name: str, selected: bool = False) -> None:
         """
@@ -89,6 +89,6 @@ class Log:
             file_type = name[name.index(".") + 1:]
     
         if not selected:
-            print(f"[{file_type}] - ".join(["", name]))
+            print(colorama.Fore.GREEN, (f"[{file_type}] - ".join(["", name])))
         else:
-            print(colorama.Fore.GREEN, f"[{file_type}] - ".join(["", name]))
+            print(colorama.Fore.WHITE, f" [{file_type}] - ".join(["", name]))
