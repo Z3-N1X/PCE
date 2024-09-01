@@ -13,6 +13,7 @@ class Core:
 
     def __init__(self):
         self.parser = ArgParser()
+        self.add_args()
         self.log= Log()
 
     def start(self):
@@ -22,13 +23,16 @@ class Core:
         """
 
         file_name = self.parser.filename
-
         if file_name:
-            self.print_file_content(file_name)
+            self._print_file_content(file_name)
+        else: 
+            print(next(os.walk('.'))[1])
 
+    def add_args(self):
+        self.parser.add_argument("filename", nargs="?")
 
-    def print_file_content(self, file_name: str):
-        """cool
+    def _print_file_content(self, file_name: str):
+        """prints file content
 
         Args:
             file_name (str): _description_

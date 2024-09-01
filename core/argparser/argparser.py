@@ -27,18 +27,13 @@ class ArgParser(argparse.ArgumentParser):
         description = "Python CLI Editor"
         epilog = f"Use {prog.lower()} -help"
 
-        self._add_args()
-
         super().__init__(prog=prog,
                          description=description,
-                         epilog=epilog,
+                         epilog=epilog
                         )
 
-    def _add_args(self):
-        self.add_argument("filename")
-
     @property
-    def filename(self):
+    def filename(self) -> str:
         """filename property.
 
         Returns:
