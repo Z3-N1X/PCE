@@ -15,7 +15,9 @@ class Core:
     def __init__(self):
         self.parser = ArgParser()
         self.add_args()
-        self.log= Log()
+        self.log = Log()
+        self.mode = "choose"
+        self.position = "."
 
     def start(self):
         """
@@ -33,27 +35,36 @@ class Core:
 
             keyboard.add_hotkey("up", self._up_key_pressed)
             keyboard.add_hotkey("down", self._down_key_pressed)
+            keyboard.add_hotkey("enter", self._enter_pressed)
 
         keyboard.wait("esc")
 
     def render_dir_childs(self):
         os.system("cls" if os.name == "nt" else "clear")
 
-        dirs_in_current_dir: list[list] = [ [x,"dir"] for x in next(os.walk('.'))[1]]
-        file_names: list[list] = [ [x,"file"] for x in next(os.walk("."), (None, None, []))[2]]  # [] if no file
+        dirs_in_current_dir: list[list] = [ [x,"dir"] for x in next(os.walk(self.position))[1]]
+        file_names: list[list] = [ [x,"file"] for x in next(os.walk(self.position), (None, None, []))[2]]  # [] if no file
 
-        all_childs = dirs_in_current_dir + file_names
+        self.all_childs = dirs_in_current_dir + file_names
 
-        self.all_childs_len = len(all_childs)
+        self.all_childs_len = len(self.all_childs)
 
         child_num = 0
-        for child in all_childs:
+        for child in self.all_childs:
             if child[1] == "file":
                 self.log.file(child[0], self.current_pos == child_num)
             if child[1] == "dir":
                 self.log.folder(child[0], self.current_pos == child_num)
             
             child_num += 1
+
+    def _enter_pressed(self):
+        selected = self.all_childs[self.current_pos]
+
+        if selected[1] == "dir":
+            self.position += f"/{selected[0]}"
+            self.current_pos = 0
+            self.render_dir_childs()
 
     def _up_key_pressed(self):
         if self.current_pos == 0:
