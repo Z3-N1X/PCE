@@ -66,6 +66,9 @@ class Core:
             self.current_pos = 0
             self.render_dir_childs()
 
+        else:
+            self._print_file_content(self.position + "/" + selected[0])
+
     def _up_key_pressed(self):
         if self.current_pos == 0:
             return
