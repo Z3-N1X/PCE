@@ -58,3 +58,37 @@ class Log:
             None
         """
         print(colorama.Fore.RED ,"[ERROR] - ".join(["", text]))
+
+    def folder(self, name: str, selected: bool = False) -> None:
+        """
+        Prints an folder type message.
+
+        Args:
+            text (str): The folder name to be printed.
+
+        Returns:
+            None
+        """
+        if not selected:
+            print("[DIR] - ".join(["", name]))
+        else:
+            print(colorama.Fore.GREEN, "[DIR] - ".join(["", name]))
+
+    def file(self, name: str, selected: bool = False) -> None:
+        """
+        Prints an file type message.
+
+        Args:
+            text (str): The file name to be printed.
+
+        Returns:
+            None
+        """
+        file_type: str = "FILE"
+        if "." in name:
+            file_type = name[name.index(".") + 1:]
+    
+        if not selected:
+            print(f"[{file_type}] - ".join(["", name]))
+        else:
+            print(colorama.Fore.GREEN, f"[{file_type}] - ".join(["", name]))
