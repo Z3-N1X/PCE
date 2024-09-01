@@ -16,8 +16,11 @@ class Core:
         self.parser = ArgParser()
         self.add_args()
         self.log = Log()
-        self.mode = "choose"
+        self.mode = "explorer"
         self.position = "."
+        self.current_pos = 0
+        self.all_childs: list
+        self.all_childs_len: int
 
     def start(self):
         """
@@ -40,46 +43,60 @@ class Core:
         keyboard.wait("esc")
 
     def render_dir_childs(self):
+        """
+        Renders all files and folders in self.position directory.
+        """
         os.system("cls" if os.name == "nt" else "clear")
 
         dirs_in_current_dir: list[list] = [ [x,"dir"] for x in next(os.walk(self.position))[1]]
-        file_names: list[list] = [ [x,"file"] for x in next(os.walk(self.position), (None, None, []))[2]]  # [] if no file
+        file_names: list[list] = [ [x,"file"] for x in next(os.walk(self.position), (None, None, []))[2] ] 
 
         self.all_childs = dirs_in_current_dir + file_names
 
-        self.all_childs_len = len(self.all_childs)
+        if self.position != ".":
+            self.all_childs.insert(0, ["..", "dir"])
 
+        print(self.position)
+
+        self.all_childs_len = len(self.all_childs)
         child_num = 0
         for child in self.all_childs:
             if child[1] == "file":
                 self.log.file(child[0], self.current_pos == child_num)
             if child[1] == "dir":
                 self.log.folder(child[0], self.current_pos == child_num)
-            
+
             child_num += 1
 
     def _enter_pressed(self):
         selected = self.all_childs[self.current_pos]
 
         if selected[1] == "dir":
-            self.position += f"/{selected[0]}"
+            if selected[0] == "..":
+                self.position = self.position[:len(self.position) - self.position[::-1].index("/") - 1]
+            else:
+                self.position += f"/{selected[0]}"
+
             self.current_pos = 0
             self.render_dir_childs()
 
         else:
+            self.mode = "file"
             self._print_file_content(self.position + "/" + selected[0])
 
     def _up_key_pressed(self):
-        if self.current_pos == 0:
-            return
-        self.current_pos -= 1    
-        self.render_dir_childs()  
+        if self.mode == "explorer":
+            if self.current_pos == 0:
+                return
+            self.current_pos -= 1
+            self.render_dir_childs()
 
     def _down_key_pressed(self):
-        if self.current_pos == self.all_childs_len - 1:
-            return
-        self.current_pos += 1    
-        self.render_dir_childs()  
+        if self.mode == "explorer":
+            if self.current_pos == self.all_childs_len - 1:
+                return
+            self.current_pos += 1
+            self.render_dir_childs()
 
     def add_args(self):
         """
